@@ -1,0 +1,23 @@
+Package: bballR
+Type: Package
+Title: Scrape basketball data from basketball-reference.com
+Version: 0.1.0
+Author: Bobby Ingram
+Maintainer: Bobby Ingram <ingram.bob@gmail.com>
+Description: More about what it does (maybe more than one line)
+    Use four spaces when indenting paragraphs within the Description.
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+Imports: 
+    dplyr,
+    feather,
+    glue,
+    lubridate,
+    magrittr,
+    rlang,
+    rvest,
+    stringr,
+    tibble,
+    xml2
+RoxygenNote: 6.0.1
