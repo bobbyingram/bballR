@@ -6,18 +6,30 @@ Author: Bobby Ingram
 Maintainer: Bobby Ingram <ingram.bob@gmail.com>
 Description: More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.
+URL: https://github.com/TambourineMan88/bballR
+BugReports: https://github.com/TambourineMan88/bballR/issues
+Depends:
+    R (>= 3.1)
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
-Imports: 
+Imports:
     dplyr,
     feather,
     glue,
     lubridate,
     magrittr,
+    purrr,
     rlang,
     rvest,
     stringr,
     tibble,
     xml2
+Suggests: 
+    covr,
+    knitr,
+    rmarkdown,
+    testthat
+VignetteBuilder: knitr
 RoxygenNote: 6.0.1
+Roxygen: list(markdown = TRUE)
