@@ -4,3 +4,7 @@ empty_as_na <- function(x){
   }
   ifelse(as.character(x) != "", x, NA)
 }
+
+year_to_season <- function(year){
+  glue::glue("{year-1}-{stringr::str_sub(year, 3, 4)}")
+}
