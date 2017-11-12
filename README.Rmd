@@ -2,6 +2,16 @@
 output: github_document
 ---
 
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "README-"
+)
+```
+
 # bballR: Scrape basketball data from basketball-reference.com in R
 
 The bballR package uses [tidyverse]("https://www.tidyverse.org/") packages to
@@ -14,4 +24,3 @@ the tidy data format.
 ```{r, eval = FALSE}
 devtools::install_github("TambourineMan88/bballR")
 ```
-
