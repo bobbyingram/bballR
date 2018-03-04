@@ -9,7 +9,7 @@ Installation
 ------------
 
 ``` r
-devtools::install_github("TambourineMan88/bballR")
+devtools::install_github("bobbyingram/bballR")
 ```
 
 Usage
