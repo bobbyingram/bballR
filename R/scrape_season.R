@@ -40,6 +40,7 @@
 #' \item{PF}{Personal fouls per game}
 #' \item{PS/G}{Points per game}
 #' }
+#'
 #' @export
 #' @md
 scrape_season_per_game <- function(year){
@@ -265,38 +266,32 @@ scrape_season_totals <- function(year){
 }
 
 scrape_season <- function(year, stat_type){
+  # Checks
   stopifnot(year %in% seq(1947, lubridate::year(lubridate::today()) + 1))
   options <- c("per game", "totals", "per minute", "per poss", "advanced")
   stats <- stringr::str_to_lower(stat_type)
   stopifnot(stats %in% options)
 
+  # Scrape
   stats <- stringr::str_replace(stats, " ", "_")
   url <- glue::glue("https://www.basketball-reference.com/leagues/NBA_{year}_{stats}.html")
   try(html <- xml2::read_html(url), silent = TRUE)
   season <- year_to_season(year)
   path <- glue::glue( '//*[@id="{stats}_stats"]')
   node <- rvest::html_node(html, xpath = path)
+
+  # Parse
   parse_stats(node) %>%
     dplyr::mutate(Season = season) %>%
     dplyr::select(.data$Season, dplyr::everything())
 }
 
 parse_stats <- function(node){
-  links <- rvest::html_nodes(node, css = "a")
-  i <- stringr::str_detect(links, "/players/[:alpha:]")
-  links <- links[i]
-  ids <- rvest::html_attr(links, name = "href") %>%
-    stringr::str_replace("/players/[:alpha:]/", "") %>%
-    stringr::str_replace(".html", "") %>%
-    tibble::tibble(PlayerId = .,
-                   Player = rvest::html_text(links)) %>%
-    dplyr::group_by(.data$Player) %>%
-    dplyr::slice(1) %>%
-    dplyr::ungroup()
+  ids <- parse_player_ids(node)
 
   # Scrape the stats and join the ids on player.
   table <- rvest::html_table(node, header = T)
-  table <- table[, which(colnames(table) != "")] #Remove blank columns.
+  table <- table[, which(colnames(table) != "")] # Remove blank columns.
 
   dt <- table %>%
     dplyr::filter(.data$Rk != "Rk") %>%

@@ -10,6 +10,7 @@ knitr::opts_chunk$set(
   comment = "#>",
   fig.path = "README-"
 )
+Sys.setenv(TZ="Europe/London")
 ```
 
 # bballR: Scrape basketball data from basketball-reference.com in R
@@ -23,4 +24,44 @@ the tidy data format.
 
 ```{r, eval = FALSE}
 devtools::install_github("TambourineMan88/bballR")
+```
+
+## Usage
+
+### Players
+To scrape high-level player information for players in the [basketball-reference player database]("https://www.basketball-reference.com/players/") use
+```{r}
+library(bballR)
+players <- scrape_all_players()
+dplyr::glimpse(players)
+```
+
+### Teams
+To scrape high-level information for teams in the the [basketball-reference team database]("https://www.basketball-reference.com/teams/") use
+```{r}
+all_teams <- scrape_teams()
+active_teams <- scrape_teams(status = "active")
+defunct_teams <- scrape_teams(status = "defunct")
+dplyr::glimpse(all_teams)
+```
+
+### Seasons
+To scrape summary player performance data for an individual season use
+```{r}
+season <- 2017
+per_game_2017 <- scrape_season_per_game(season)
+per_100_2017 <- scrape_season_per_100_poss(season)
+per_36_2017 <- scrape_season_per_36_minute(season)
+adv_2017 <- scrape_season_advanced(season)
+totals_2017 <- scrape_season_totals(season)
+dplyr::glimpse(per_game_2017)
+```
+### Game Logs
+To scrape an individual players regular season game logs from a single season 
+you need to know use unique player Id from the players lookup:
+```{r}
+player <- "Dwyane Wade"
+wade <- dplyr::filter(players, Player == player)
+wade_logs <- scrape_game_logs(wade$PlayerId, season)
+dplyr::glimpse(wade_logs)
 ```

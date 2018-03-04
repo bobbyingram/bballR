@@ -8,16 +8,17 @@
 #'
 #' \describe{
 #' \item{Player}{Player name}
-#' \item{PlayerId}{Player page Id}
+#' \item{PlayerId}{https://www.basketball-reference.com/ player page identifier}
 #' \item{From}{First year in league}
 #' \item{To}{Last year in league}
-#' \item{Position}{Position(s) played}
-#' \item{Height}{Height in 'feet-inches' format}
-#' \item{Weight}{Weight in pounds}
-#' \item{DOB}{Date of birth}
+#' \item{Pos}{Position(s) played}
+#' \item{Ht}{Height in 'feet-inches' format}
+#' \item{Wt}{Weight in pounds}
+#' \item{Birth Date}{Date of birth}
 #' \item{College}{What college did the player attend?}
-#' \item{HOF}{Is this player in the Hall of Fame?}
+#' \item{HoF}{Is this player in the Hall of Fame?}
 #' }
+#'
 #' @export
 #' @md
 scrape_all_players <- function(){
@@ -26,40 +27,35 @@ scrape_all_players <- function(){
 }
 
 scrape_players_by_initial <- function(initial){
+  # Check
   stopifnot(stringr::str_length(initial) == 1)
   stopifnot(stringr::str_detect(initial, "[:alpha:]"))
 
+  # Scrape
   letter <- stringr::str_to_lower(initial)
-  url <- glue::glue("http://www.basketball-reference.com/players/{initial}/")
-
+  url <- glue::glue("http://www.basketball-reference.com/players/{letter}/")
   try(html <- xml2::read_html(url), silent = TRUE)
 
-  if (!is.list(html)) {
-    return (tibble::tibble())
-  }
+  node <- rvest::html_node(html, xpath ='//*[@id="players"]')
 
-  links <- rvest::html_nodes(html, css = "th a") %>%
-    rvest::html_attr(name = "href")
+  # Parse
+  parse_players(node)
+}
 
-  player_id <- links %>%
-    stringr::str_replace(pattern = "/players/[:alpha:]/", "") %>%
-    stringr::str_replace(pattern = ".html", "")
+parse_players <- function(node){
+  ids <- parse_player_ids(node)
 
-  table <- rvest::html_node(html, css = "table") %>%
-    rvest::html_table(header = TRUE)
+  # Scrape the stats and join the ids on player.
+  table <- rvest::html_table(node, header = T)
+  table <- table[, which(colnames(table) != "")] #Remove blank columns.
 
-  players <- table %>%
-    dplyr::rename(Position = .data$Pos,
-                  Height = .data$Ht,
-                  Weight = .data$Wt,
-                  DOB = .data$`Birth Date`) %>%
-    tibble::as_tibble() %>%
-    dplyr::mutate(HOF = stringr::str_detect(.data$Player, "\\*"),
+  dt <- table %>%
+    dplyr::mutate(HoF = stringr::str_detect(.data$Player, "\\*"),
                   Player = stringr::str_replace_all(.data$Player, "\\*", ""),
-                  DOB = lubridate::mdy(.data$DOB, tz = NULL),
-                  PlayerId = player_id) %>%
+                  `Birth Date` = lubridate::mdy(.data$`Birth Date`, tz = NULL)) %>%
     dplyr::mutate_if(is.character, empty_as_na) %>%
+    dplyr::left_join(ids, by = "Player") %>%
     dplyr::select(.data$Player, .data$PlayerId, dplyr::everything())
 
-  players
+  tibble::as_tibble(dt)
 }

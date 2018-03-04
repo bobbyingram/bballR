@@ -13,15 +13,15 @@ The fields are:
 
 \describe{
 \item{Player}{Player name}
-\item{PlayerId}{Player page Id}
+\item{PlayerId}{https://www.basketball-reference.com/ player page identifier}
 \item{From}{First year in league}
 \item{To}{Last year in league}
-\item{Position}{Position(s) played}
-\item{Height}{Height in 'feet-inches' format}
-\item{Weight}{Weight in pounds}
-\item{DOB}{Date of birth}
+\item{Pos}{Position(s) played}
+\item{Ht}{Height in 'feet-inches' format}
+\item{Wt}{Weight in pounds}
+\item{Birth Date}{Date of birth}
 \item{College}{What college did the player attend?}
-\item{HOF}{Is this player in the Hall of Fame?}
+\item{HoF}{Is this player in the Hall of Fame?}
 }
 }
 \description{

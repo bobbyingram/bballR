@@ -20,19 +20,18 @@ The fields are:
 \describe{
 \item{Franchise}{Franchise name}
 \item{FranchiseId}{Three letter identifier}
-\item{League}{The leagues the franchise participated in}
+\item{Lg}{The leagues the franchise participated in}
 \item{From}{First year in league}
 \item{To}{Last year in league}
-\item{Years}{Years active}
-\item{Games}{Total games played}
-\item{Won}{Total wins}
-\item{Lost}{Total losses}
-\item{WinLossRatio}{Wins / Losses}
-\item{PlayoffApps}{Total appearances in playoffs}
-\item{DivisionWins}{Total divisional title wins}
-\item{ConferenceWins}{Total conference title wins}
-\item{ChampionshipWins}{Total championship title wins}
-\item{Active}{True if franchise is still active in NBA.}
+\item{Yrs}{Years active}
+\item{G}{Total games played}
+\item{W}{Total wins}
+\item{L}{Total losses}
+\item{W/L\%}{Wins / Losses}
+\item{Plyfs}{Total appearances in playoffs}
+\item{Div}{Total divisional title wins (including ties)}
+\item{Conf}{Total conference title wins}
+\item{Champ}{Total championship title wins}
 }
 }
 \description{
