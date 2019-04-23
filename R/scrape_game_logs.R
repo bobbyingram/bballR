@@ -72,7 +72,7 @@ scrape_game_logs <- function(player_id, year){
 
   # Regular season.
   node <- rvest::html_node(html, xpath = '//*[@id="pgl_basic"]')
-  table <- rvest::html_table(node, header = T) %>%
+  table <- rvest::html_table(node, header = T, fill = T) %>%
     remove_blank_cols()
 
   dt <- table %>%
